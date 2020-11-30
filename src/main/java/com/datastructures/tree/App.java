@@ -8,7 +8,7 @@ public class App {
         tree.insert(31);
         tree.insert(-1);
         tree.insert(-2);
-        tree.insert(-12);
+        tree.insert(-17);
         tree.insert(2);
 
         System.out.println("Max: " + tree.getMax());
