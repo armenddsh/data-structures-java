@@ -1,5 +1,8 @@
 package com.datastructures.tree;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
     private Node<T> root;
     private long count = 0;
@@ -86,8 +89,80 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
     }
 
     @Override
-    public void traversal() {
+    public Collection<T> traversal() {
+        final Collection<T> collection = new ArrayList<>((int) count);
 
+        if (root != null)
+            return inOrderTraversal(collection, root);
+
+        return collection;
+    }
+
+    @Override
+    public Collection<T> traversal(TRAVERSAL traversal) {
+        final Collection<T> collection = new ArrayList<T>((int) count);
+
+        if (root != null)
+            switch (traversal) {
+                case IN_ORDER:
+                    return inOrderTraversal(collection, root);
+                case PRE_ORDER:
+                    return preOrderTraversal(collection, root);
+                case POST_ORDER:
+                    return postOrderTraversal(collection, root);
+            }
+
+        return collection;
+    }
+
+    private Collection<T> inOrderTraversal(Collection<T> collection, Node<T> root) {
+        final Node<T> leftChild = root.getLeftChild();
+        final Node<T> rightChild = root.getRightChild();
+
+        if (leftChild != null) {
+            inOrderTraversal(collection, leftChild);
+        }
+
+        collection.add(root.getData());
+
+        if (rightChild != null) {
+            inOrderTraversal(collection, rightChild);
+        }
+
+        return collection;
+    }
+
+    private Collection<T> preOrderTraversal(Collection<T> collection, Node<T> root) {
+        final Node<T> leftChild = root.getLeftChild();
+        final Node<T> rightChild = root.getRightChild();
+
+        collection.add(root.getData());
+
+        if (leftChild != null) {
+            inOrderTraversal(collection, leftChild);
+        }
+        if (rightChild != null) {
+            inOrderTraversal(collection, rightChild);
+        }
+
+        return collection;
+    }
+
+    private Collection<T> postOrderTraversal(Collection<T> collection, Node<T> root) {
+        final Node<T> leftChild = root.getLeftChild();
+        final Node<T> rightChild = root.getRightChild();
+
+        if (leftChild != null) {
+            inOrderTraversal(collection, leftChild);
+        }
+
+        if (rightChild != null) {
+            inOrderTraversal(collection, rightChild);
+        }
+
+        collection.add(root.getData());
+
+        return collection;
     }
 
     @Override

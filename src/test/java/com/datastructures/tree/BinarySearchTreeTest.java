@@ -1,9 +1,13 @@
 package com.datastructures.tree;
 
 
-import org.junit.Assert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Collection;
+
+import static org.junit.Assert.*;
 
 public class BinarySearchTreeTest {
     private Tree<Integer> tree = null;
@@ -26,41 +30,74 @@ public class BinarySearchTreeTest {
         tree.insert(-21233482);
     }
 
+    @After
+    public void after() {
+        tree = null;
+    }
+
     @Test
     public void insert() {
-        Assert.assertEquals(12, tree.length());
+        assertEquals(12, tree.length());
     }
 
     @Test
     public void find_value__should_exists() {
         final Integer integer = tree.find(3);
 
-        Assert.assertNotNull(integer);
+        assertNotNull(integer);
     }
 
     @Test
     public void find_value__should_not_exists() {
         final Integer integer = tree.find(1);
 
-        Assert.assertNull(integer);
+        assertNull(integer);
     }
 
     @Test
     public void exists__should_return_false() {
         final boolean integer = tree.exists(1);
 
-        Assert.assertFalse(integer);
+        assertFalse(integer);
     }
 
     @Test
     public void exists__should_return_true() {
         final boolean integer = tree.exists(3);
 
-        Assert.assertTrue(integer);
+        assertTrue(integer);
     }
 
     @Test
-    public void traversal() {
+    public void inOrderTraversal() {
+        final Collection<Integer> collection = tree.traversal();
+
+        assertArrayEquals(new Integer[]{-21233482, -111113, -113, -33, -13, -11, -3, -2, 3, 213, 23482, 333333},
+                collection.toArray());
+    }
+
+    @Test
+    public void preOrderTraversal_defaul() {
+        final Collection<Integer> collection = tree.traversal(TRAVERSAL.IN_ORDER);
+
+        assertArrayEquals(new Integer[]{-21233482, -111113, -113, -33, -13, -11, -3, -2, 3, 213, 23482, 333333},
+                collection.toArray());
+    }
+
+    @Test
+    public void preOrderTraversal_preOrder() {
+        final Collection<Integer> collection = tree.traversal(TRAVERSAL.PRE_ORDER);
+
+        assertArrayEquals(new Integer[]{-11, -21233482, -111113, -113, -33, -13, -3, -2, 3, 213, 23482, 333333},
+                collection.toArray());
+    }
+
+    @Test
+    public void afterOrderTraversal_postOrder() {
+        final Collection<Integer> collection = tree.traversal(TRAVERSAL.POST_ORDER);
+
+        assertArrayEquals(new Integer[]{-21233482, -111113, -113, -33, -13, -3, -2, 3, 213, 23482, 333333, -11},
+                collection.toArray());
     }
 
     @Test
@@ -71,13 +108,13 @@ public class BinarySearchTreeTest {
     public void getMax() {
         final int max = tree.getMax();
 
-        Assert.assertEquals(333333, max);
+        assertEquals(333333, max);
     }
 
     @Test
     public void getMin() {
         final int min = tree.getMin();
 
-        Assert.assertEquals(-21233482, min);
+        assertEquals(-21233482, min);
     }
 }
