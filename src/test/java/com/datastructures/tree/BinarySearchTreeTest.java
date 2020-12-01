@@ -70,7 +70,7 @@ public class BinarySearchTreeTest {
 
     @Test
     public void inOrderTraversal() {
-        final Collection<Integer> collection = tree.traversal();
+        final Collection<Integer> collection = tree.values();
 
         assertArrayEquals(new Integer[]{-21233482, -111113, -113, -33, -13, -11, -3, -2, 3, 213, 23482, 333333},
                 collection.toArray());
@@ -78,7 +78,7 @@ public class BinarySearchTreeTest {
 
     @Test
     public void preOrderTraversal_defaul() {
-        final Collection<Integer> collection = tree.traversal(TRAVERSAL.IN_ORDER);
+        final Collection<Integer> collection = tree.values(TRAVERSAL.IN_ORDER);
 
         assertArrayEquals(new Integer[]{-21233482, -111113, -113, -33, -13, -11, -3, -2, 3, 213, 23482, 333333},
                 collection.toArray());
@@ -86,7 +86,7 @@ public class BinarySearchTreeTest {
 
     @Test
     public void preOrderTraversal_preOrder() {
-        final Collection<Integer> collection = tree.traversal(TRAVERSAL.PRE_ORDER);
+        final Collection<Integer> collection = tree.values(TRAVERSAL.PRE_ORDER);
 
         assertArrayEquals(new Integer[]{-11, -21233482, -111113, -113, -33, -13, -3, -2, 3, 213, 23482, 333333},
                 collection.toArray());
@@ -94,7 +94,7 @@ public class BinarySearchTreeTest {
 
     @Test
     public void afterOrderTraversal_postOrder() {
-        final Collection<Integer> collection = tree.traversal(TRAVERSAL.POST_ORDER);
+        final Collection<Integer> collection = tree.values(TRAVERSAL.POST_ORDER);
 
         assertArrayEquals(new Integer[]{-21233482, -111113, -113, -33, -13, -3, -2, 3, 213, 23482, 333333, -11},
                 collection.toArray());
@@ -116,5 +116,115 @@ public class BinarySearchTreeTest {
         final int min = tree.getMin();
 
         assertEquals(-21233482, min);
+    }
+
+    /**
+     * 10
+     * /
+     * 5
+     * / \
+     * 3  7
+     */
+
+    @Test
+    public void findParentNodeTest0() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+
+        tree.insert(10);
+        tree.insert(18);
+        tree.insert(15);
+        tree.insert(14);
+        tree.insert(22);
+        tree.insert(23);
+
+        tree.delete(14);
+
+        assertArrayEquals(new Integer[]{10, 15, 18, 22, 23},
+                tree.values().toArray());
+    }
+
+    @Test
+    public void findParentNodeTest1() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+
+        tree.insert(10);
+        tree.insert(18);
+        tree.insert(15);
+        tree.insert(14);
+        tree.insert(22);
+        tree.insert(23);
+
+        tree.delete(23);
+
+        assertArrayEquals(new Integer[]{10, 14, 15, 18, 22},
+                tree.values().toArray());
+    }
+
+    @Test
+    public void findParentNodeTest2() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+
+        tree.insert(10);
+        tree.insert(18);
+        tree.insert(15);
+        tree.insert(14);
+        tree.insert(22);
+        tree.insert(23);
+
+        tree.delete(15);
+
+        assertArrayEquals(new Integer[]{10, 14, 18, 22, 23},
+                tree.values().toArray());
+    }
+
+    @Test
+    public void findParentNodeTest3() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+
+        tree.insert(10);
+        tree.insert(18);
+        tree.insert(15);
+        tree.insert(14);
+        tree.insert(22);
+        tree.insert(23);
+
+        tree.delete(22);
+
+        assertArrayEquals(new Integer[]{10, 14, 15, 18, 23},
+                tree.values().toArray());
+    }
+
+    @Test
+    public void findParentNodeTest4() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+
+        tree.insert(10);
+        tree.insert(18);
+        tree.insert(15);
+        tree.insert(14);
+        tree.insert(22);
+        tree.insert(23);
+
+        tree.delete(10);
+
+        assertArrayEquals(new Integer[]{14, 15, 18, 22, 23},
+                tree.values().toArray());
+    }
+
+    @Test
+    public void findParentNodeTest5() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+
+        tree.insert(10);
+        tree.insert(18);
+        tree.insert(15);
+        tree.insert(14);
+        tree.insert(22);
+        tree.insert(23);
+
+        tree.delete(11);
+
+        assertArrayEquals(new Integer[]{10, 14, 15, 18, 22, 23},
+                tree.values().toArray());
     }
 }

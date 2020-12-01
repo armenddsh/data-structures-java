@@ -2,6 +2,7 @@ package com.datastructures.tree;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
     private Node<T> root;
@@ -41,7 +42,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
     @Override
     public T find(T data) {
         if (root != null) {
-            return findNode(data, root);
+            return Objects.requireNonNull(findNode(data, root)).getData();
         }
 
         return null;
@@ -50,24 +51,6 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
     @Override
     public boolean exists(T data) {
         return findNode(data, root) != null;
-    }
-
-    private T findNode(T data, Node<T> root) {
-        if (data.compareTo(root.getData()) < 0) {
-            if (root.getLeftChild() == null) {
-                return null;
-            } else {
-                return findNode(data, root.getLeftChild());
-            }
-        } else if (data.compareTo(root.getData()) > 0) {
-            if (root.getRightChild() == null) {
-                return null;
-            } else {
-                return findNode(data, root.getRightChild());
-            }
-        } else {
-            return data;
-        }
     }
 
     private void insertData(Node<T> newNode, Node<T> current) {
@@ -89,7 +72,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
     }
 
     @Override
-    public Collection<T> traversal() {
+    public Collection<T> values() {
         final Collection<T> collection = new ArrayList<>((int) count);
 
         if (root != null)
@@ -99,7 +82,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
     }
 
     @Override
-    public Collection<T> traversal(TRAVERSAL traversal) {
+    public Collection<T> values(TRAVERSAL traversal) {
         final Collection<T> collection = new ArrayList<T>((int) count);
 
         if (root != null)
@@ -167,7 +150,77 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
 
     @Override
     public void delete(T data) {
+        if (data == null) {
+            throw new IllegalArgumentException("Data is required!");
+        }
 
+        if (root != null) {
+            root = deleteNode(data, root);
+        }
+    }
+
+    private Node<T> deleteNode(T data, Node<T> node) {
+        if (node == null) {
+            return null;
+        }
+
+        final T nodeData = node.getData();
+
+        if (data.compareTo(nodeData) < 0) {
+            node.setLeftChild(deleteNode(data, node.getLeftChild()));
+        } else if (data.compareTo(nodeData) > 0) {
+            node.setRightChild(deleteNode(data, node.getRightChild()));
+        } else {
+            final Node<T> subChildLeft = node.getLeftChild();
+            final Node<T> subChildRight = node.getRightChild();
+
+            if (subChildLeft == null && subChildRight == null) {
+                return null;
+            } else if (subChildLeft != null && subChildRight == null) {
+                node.setLeftChild(null);
+                return subChildLeft;
+            } else if (subChildRight != null && subChildLeft == null) {
+                node.setRightChild(null);
+                return subChildRight;
+            } else {
+                final Node<T> successor = findSuccessor(node.getLeftChild());
+                node.setData(successor.getData());
+                node.setLeftChild(deleteNode(successor.getData(), node.getLeftChild()));
+            }
+        }
+        return node;
+    }
+
+    private Node<T> findSuccessor(Node<T> node) {
+        if (node.getRightChild() == null) {
+            return node;
+        }
+        return findSuccessor(node.getRightChild());
+    }
+
+    private Node<T> findPredecessor(Node<T> node) {
+        if (node.getLeftChild() == null) {
+            return node;
+        }
+        return findSuccessor(node.getLeftChild());
+    }
+
+    private Node<T> findNode(T data, Node<T> node) {
+        if (data.compareTo(root.getData()) < 0) {
+            if (root.getLeftChild() == null) {
+                return null;
+            } else {
+                return findNode(data, root.getLeftChild());
+            }
+        } else if (data.compareTo(root.getData()) > 0) {
+            if (root.getRightChild() == null) {
+                return null;
+            } else {
+                return findNode(data, root.getRightChild());
+            }
+        } else {
+            return node;
+        }
     }
 
     @Override

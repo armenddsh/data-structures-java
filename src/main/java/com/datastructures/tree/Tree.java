@@ -3,9 +3,9 @@ package com.datastructures.tree;
 import java.util.Collection;
 
 public interface Tree<T> {
-    Collection<T> traversal();
+    Collection<T> values();
 
-    Collection<T> traversal(TRAVERSAL traversal);
+    Collection<T> values(TRAVERSAL traversal);
 
     void insert(T data);
 
