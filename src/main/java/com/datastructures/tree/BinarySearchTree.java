@@ -2,7 +2,6 @@ package com.datastructures.tree;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 
 public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
     private Node<T> root;
@@ -42,7 +41,10 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
     @Override
     public T find(T data) {
         if (root != null) {
-            return Objects.requireNonNull(findNode(data, root)).getData();
+            final Node<T> node = findNode(data, root);
+            if (node != null) {
+                return node.getData();
+            }
         }
 
         return null;
@@ -155,7 +157,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
         }
 
         if (root != null) {
-            root = deleteNode(data, root);
+            deleteNode(data, root);
         }
     }
 
@@ -206,17 +208,17 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
     }
 
     private Node<T> findNode(T data, Node<T> node) {
-        if (data.compareTo(root.getData()) < 0) {
-            if (root.getLeftChild() == null) {
+        if (data.compareTo(node.getData()) < 0) {
+            if (node.getLeftChild() == null) {
                 return null;
             } else {
-                return findNode(data, root.getLeftChild());
+                return findNode(data, node.getLeftChild());
             }
-        } else if (data.compareTo(root.getData()) > 0) {
-            if (root.getRightChild() == null) {
+        } else if (data.compareTo(node.getData()) > 0) {
+            if (node.getRightChild() == null) {
                 return null;
             } else {
-                return findNode(data, root.getRightChild());
+                return findNode(data, node.getRightChild());
             }
         } else {
             return node;
