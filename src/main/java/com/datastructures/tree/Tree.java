@@ -13,6 +13,8 @@ public interface Tree<T> {
 
     boolean exists(T data);
 
+    void delete(T data, SUCCESSOR successor);
+
     void delete(T data);
 
     long length();

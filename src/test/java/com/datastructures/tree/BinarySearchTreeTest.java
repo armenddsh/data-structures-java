@@ -5,7 +5,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -227,5 +230,219 @@ public class BinarySearchTreeTest {
 
         assertArrayEquals(new Integer[]{5, 6, 8, 9, 10, 14, 15, 18, 22, 23},
                 tree.values().toArray());
+    }
+
+    @Test
+    public void deleteNodeTest6() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+
+        tree.insert(10);
+        tree.insert(7);
+        tree.insert(5);
+        tree.insert(8);
+        tree.insert(9);
+        tree.insert(6);
+        tree.insert(18);
+        tree.insert(15);
+        tree.insert(14);
+        tree.insert(22);
+        tree.insert(23);
+
+        tree.delete(7, SUCCESSOR.PREDECESSOR);
+
+        assertArrayEquals(new Integer[]{5, 6, 8, 9, 10, 14, 15, 18, 22, 23},
+                tree.values().toArray());
+    }
+
+    @Test
+    public void deleteNodeTest7() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+
+        tree.insert(10);
+        tree.insert(7);
+        tree.insert(5);
+        tree.insert(8);
+        tree.insert(9);
+        tree.insert(6);
+        tree.insert(18);
+        tree.insert(15);
+        tree.insert(14);
+        tree.insert(22);
+        tree.insert(23);
+
+        tree.delete(10, SUCCESSOR.PREDECESSOR);
+
+        assertArrayEquals(new Integer[]{5, 6, 7, 8, 9, 14, 15, 18, 22, 23},
+                tree.values().toArray());
+    }
+
+    @Test
+    public void deleteNodeTest8() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+
+        tree.insert(10);
+        tree.insert(7);
+        tree.insert(5);
+        tree.insert(8);
+        tree.insert(9);
+        tree.insert(6);
+        tree.insert(18);
+        tree.insert(15);
+        tree.insert(14);
+        tree.insert(22);
+        tree.insert(23);
+
+        tree.delete(100, SUCCESSOR.PREDECESSOR);
+
+        assertArrayEquals(new Integer[]{5, 6, 7, 8, 9, 10, 14, 15, 18, 22, 23},
+                tree.values().toArray());
+    }
+
+    @Test
+    public void deleteNodeTest9() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+
+        final int k = 999;
+        final int seed = 100000;
+        final Random random = new Random(seed);
+        final ArrayList<Integer> integers = new ArrayList<>(seed);
+
+        for (int i = 0; i < seed; i++) {
+            integers.add(random.nextInt());
+        }
+
+        for (Integer integer : integers) {
+            tree.insert(integer);
+        }
+
+        tree.insert(k);
+        tree.delete(k, SUCCESSOR.SUCCESSOR);
+        final Integer[] treeValues = tree.values().toArray(new Integer[0]);
+        Collections.sort(integers);
+
+        boolean isValid = true;
+        for (int i = 0; i < seed; i++) {
+            if (integers.get(i) != treeValues[i]) {
+                isValid = false;
+            }
+        }
+
+        assertTrue(isValid);
+    }
+
+    @Test
+    public void deleteNodeTest10() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+
+        final int k = 999;
+        final int seed = 100000;
+        final Random random = new Random(seed);
+        final ArrayList<Integer> integers = new ArrayList<>(seed);
+
+        for (int i = 0; i < seed; i++) {
+            integers.add(random.nextInt());
+        }
+
+        for (Integer integer : integers) {
+            tree.insert(integer);
+        }
+
+        tree.insert(k);
+        tree.delete(k, SUCCESSOR.PREDECESSOR);
+        final Integer[] treeValues = tree.values().toArray(new Integer[0]);
+        Collections.sort(integers);
+
+        boolean isValid = true;
+        for (int i = 0; i < seed; i++) {
+            if (integers.get(i) != treeValues[i]) {
+                isValid = false;
+            }
+        }
+
+        assertTrue(isValid);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void delete_test_null1() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+        tree.delete(null, SUCCESSOR.SUCCESSOR);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void delete_test_null2() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+        tree.delete(null, SUCCESSOR.PREDECESSOR);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void delete_test_null3() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+        tree.delete(null);
+    }
+
+    @Test
+    public void toStringTest() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+
+        tree.insert(10);
+
+        final String s = tree.toString();
+
+        assertNotNull(s);
+    }
+
+    @Test
+    public void constructorTest() {
+        Tree<Integer> tree = new BinarySearchTree<>(1);
+
+        assertEquals(1, tree.length());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void constructorTest__input_null() {
+        Tree<Integer> tree = new BinarySearchTree<>(null);
+
+        assertEquals(1, tree.length());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void insert_data_null() {
+        Tree<Integer> tree = new BinarySearchTree<>(1);
+
+        tree.insert(null);
+
+        assertEquals(1, tree.length());
+    }
+
+    @Test
+    public void testValues1() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+        tree.values();
+
+        assertEquals(0, tree.length());
+    }
+
+    @Test
+    public void testValues2() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+        tree.values(TRAVERSAL.IN_ORDER);
+
+        assertEquals(0, tree.length());
+    }
+
+    @Test
+    public void getMin_empty() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+        final Integer min = tree.getMin();
+
+        assertNull(min);
+    }
+
+    @Test
+    public void getMax_empty() {
+        Tree<Integer> tree = new BinarySearchTree<>();
+        final Integer max = tree.getMax();
+
+        assertNull(max);
     }
 }

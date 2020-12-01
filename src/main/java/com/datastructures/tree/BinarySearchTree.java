@@ -157,11 +157,22 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
         }
 
         if (root != null) {
-            deleteNode(data, root);
+            deleteNode(data, root, SUCCESSOR.SUCCESSOR);
         }
     }
 
-    private Node<T> deleteNode(T data, Node<T> node) {
+    @Override
+    public void delete(T data, SUCCESSOR successor) {
+        if (data == null) {
+            throw new IllegalArgumentException("Data is required!");
+        }
+
+        if (root != null) {
+            deleteNode(data, root, successor);
+        }
+    }
+
+    private Node<T> deleteNode(T data, Node<T> node, SUCCESSOR successor) {
         if (node == null) {
             return null;
         }
@@ -169,9 +180,9 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
         final T nodeData = node.getData();
 
         if (data.compareTo(nodeData) < 0) {
-            node.setLeftChild(deleteNode(data, node.getLeftChild()));
+            node.setLeftChild(deleteNode(data, node.getLeftChild(), successor));
         } else if (data.compareTo(nodeData) > 0) {
-            node.setRightChild(deleteNode(data, node.getRightChild()));
+            node.setRightChild(deleteNode(data, node.getRightChild(), successor));
         } else {
             final Node<T> subChildLeft = node.getLeftChild();
             final Node<T> subChildRight = node.getRightChild();
@@ -185,9 +196,16 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
                 node.setRightChild(null);
                 return subChildRight;
             } else {
-                final Node<T> successor = findSuccessor(node.getLeftChild());
-                node.setData(successor.getData());
-                node.setLeftChild(deleteNode(successor.getData(), node.getLeftChild()));
+                Node<T> scss = null;
+                if (successor == SUCCESSOR.SUCCESSOR) {
+                    scss = findSuccessor(node.getLeftChild());
+                    node.setData(scss.getData());
+                    node.setLeftChild(deleteNode(scss.getData(), node.getLeftChild(), successor));
+                } else {
+                    scss = findPredecessor(node.getRightChild());
+                    node.setData(scss.getData());
+                    node.setRightChild(deleteNode(scss.getData(), node.getRightChild(), successor));
+                }
             }
         }
         return node;
@@ -204,7 +222,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
         if (node.getLeftChild() == null) {
             return node;
         }
-        return findSuccessor(node.getLeftChild());
+        return findPredecessor(node.getLeftChild());
     }
 
     private Node<T> findNode(T data, Node<T> node) {
@@ -260,5 +278,13 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
             return getMaxValue(rightChild);
         }
         return node.getData();
+    }
+
+    @Override
+    public String toString() {
+        return "BinarySearchTree{" +
+                "root=" + root +
+                ", count=" + count +
+                '}';
     }
 }
